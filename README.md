@@ -1,4 +1,5 @@
-# PitE_lab2
+[![Build Status](https://travis-ci.org/phpl/pite_lab3.svg?branch=master)](https://travis-ci.org/phpl/pite_lab3)
+[![Coverage Status](https://coveralls.io/repos/github/phpl/pite_lab3/badge.svg?branch=master)](https://coveralls.io/github/phpl/pite_lab3?branch=master)
 ## Games - Client/Server Edition
 This application can be easily ported to be run as a web service on Apache server and regular web browser JavaScript client.
 Games implemented:

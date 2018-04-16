@@ -68,7 +68,7 @@ class TestOxController(unittest.TestCase):
     @patch('game.server.config.OXModel')
     def test_controller_get_new_game_instance(self, model_mock):
         con = Controller()
-        old_guid = con._Controller__game_guid;
+        old_guid = con._Controller__game_guid
         model_mock.return_value = model_mock
         model_mock.get_new_game_instance.return_value = True
         g_id = con.get('get_new_game_instance_ox', '0', 'True')

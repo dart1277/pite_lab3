@@ -7,7 +7,7 @@ from game.client.console import OXGame
 class TestOXGame(TestCase):
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_add_player(self, controller_mock,game_sel):
+    def test_add_player(self, controller_mock, game_sel):
         game = OXGame()
         game.id = 1
 
@@ -18,7 +18,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_get_current_player(self, controller_mock,game_sel):
+    def test_get_current_player(self, controller_mock, game_sel):
         game = OXGame()
         game.id = 1
 
@@ -28,7 +28,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_get_board(self, controller_mock,game_sel):
+    def test_get_board(self, controller_mock, game_sel):
         game = OXGame()
 
         game.id = 1
@@ -39,7 +39,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_make_move(self, controller_mock,game_sel):
+    def test_make_move(self, controller_mock, game_sel):
         game = OXGame()
 
         game.id = 1
@@ -50,9 +50,8 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', True))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test__get_new_game_instance(self, controller_mock,game_sel):
+    def test__get_new_game_instance(self, controller_mock, game_sel):
         game = OXGame()
-
 
         game._get_new_game_instance()
 
@@ -60,7 +59,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_check_game_result_true(self, controller_mock,game_sel):
+    def test_check_game_result_true(self, controller_mock, game_sel):
         controller_mock.return_value = True
         game = OXGame()
 
@@ -73,7 +72,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_check_game_result_none(self, controller_mock,game_sel):
+    def test_check_game_result_none(self, controller_mock, game_sel):
         controller_mock.return_value = 'False'
         game = OXGame()
 
@@ -86,7 +85,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_end_game(self, controller_mock,game_sel):
+    def test_end_game(self, controller_mock, game_sel):
         game = OXGame()
 
         game.id = 1
@@ -97,7 +96,7 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test_play(self, controller_mock,game_sel):
+    def test_play(self, controller_mock, game_sel):
         controller_mock.return_value = 'True'
         game = OXGame()
 
@@ -110,37 +109,40 @@ class TestOXGame(TestCase):
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test__init_players(self, controller_mock,game_sel):
+    def test__init_players(self, controller_mock, game_sel):
         game = OXGame()
 
         game.id = 1
 
         with patch('builtins.input', return_value='test'):
-            game._init_players()
+            game.init_players()
 
         controller_mock.assert_called_with(
             '[["method", "add_player_ox"], ["id", "1"], ["player_name", "test"], ["player_number", "0"]]')
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test__perform_next_move(self, controller_mock,game_sel):
+    def test__perform_next_move(self, controller_mock, game_sel):
         controller_mock.return_value = 'True'
         game = OXGame()
 
         game.id = 1
 
         with patch('builtins.input', return_value=1):
-            game._perform_next_move()
+            game.perform_next_move()
 
-        controller_mock.assert_called_with('[["method", "check_game_result_ox"], ["id", "1"]]')
+        controller_mock.assert_called_with(
+            '[["method", "check_game_result_ox"], ["id", "1"]]')
 
     @patch('game.client.console.OXGame.prompt_user_for_game_type', return_value=('ox', False))
     @patch('game.client.OXControllerNetworkClient.OXControllerNetworkClient.get')
-    def test__finish_game(self, controller_mock,game_sel):
+    def test__finish_game(self, controller_mock, game_sel):
         game = OXGame()
 
         game.id = 1
+        game._in_game_result = "test"
 
-        game._finish_game("test")
+        game.finish_game()
 
-        controller_mock.assert_called_with('[["method", "end_game_ox"], ["id", "1"]]')
+        controller_mock.assert_called_with(
+            '[["method", "end_game_ox"], ["id", "1"]]')

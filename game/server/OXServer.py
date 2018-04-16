@@ -1,6 +1,7 @@
 import socket
-from game.server.controller import Controller
+
 from game.common.messages import Messages
+from game.server.controller import Controller
 from game.server.logger import Logger
 
 
@@ -16,7 +17,7 @@ class OXServer:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.bind((self.TCP_IP, self.TCP_PORT))
             s.listen(8)
-        except:
+        except (socket.error, socket.herror, socket.gaierror, socket.timeout):
             s = None
         if s is None:
             Logger.log('Could not open socket')

@@ -1,5 +1,6 @@
 from game.server.views import OXView, IntervalView
-from game.server.models import OXModel,IntervalModel
+from game.server.models import OXModel, IntervalModel
+
 
 class ViewResolver:
 
@@ -51,7 +52,7 @@ class Config:
                                                         'view': self.view_interval.get_current_player,
                                                         'error_view': self.view_interval.error
                                                         },
-                        'get_board_interval': {'model':self.model_interval.get_board,
+                        'get_board_interval': {'model': self.model_interval.get_board,
                                                'view': self.view_interval.get_board,
                                                'error_view': self.view_interval.get_board
                                                },

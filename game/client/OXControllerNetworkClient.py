@@ -21,7 +21,7 @@ class OXControllerNetworkClient:
                 data = s.recv(self.BUFFER_SIZE).decode(encoding='UTF-8')
                 return_val = Messages.process_response(data)
                 request_not_completed = False
-            except:
+            except (socket.error, socket.herror, socket.gaierror, socket.timeout):
                 print('Error: Cannot connect to the server!')
                 try_again = input('Do you want to try again? Please press enter to confirm or type N to exit.\n')
                 if len(try_again) > 0:

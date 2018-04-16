@@ -101,9 +101,7 @@ class TestOXModel(TestCase):
 
     def test_check_game_result_draw(self):
         expected_result = 'A draw'
-        self.testModel._board = [1, 1, 0,
-                                          0, 1, 1,
-                                          1, 0, 0]
+        self.testModel._board = [1, 1, 0, 0, 1, 1, 1, 0, 0]
 
         result = self.testModel.check_game_result()
 

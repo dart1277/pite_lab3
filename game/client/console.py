@@ -1,4 +1,5 @@
 from game.client.OXControllerNetworkClient import OXControllerNetworkClient
+from game.client.gameFSM import GameFSM, Events
 from game.common.messages import Messages
 
 
@@ -9,8 +10,11 @@ class OXGame:
         self.__message_handler = Messages(self.__game_type)
         self.controller = OXControllerNetworkClient()
         self.id = None
+        self._in_game_result = None
         while not self.id:
             self.id = self._get_new_game_instance()
+
+        self.fsm = GameFSM(self)
 
     def add_player(self, name, player_no):
         request = self.__message_handler. \
@@ -44,36 +48,38 @@ class OXGame:
 
     def play(self):
         try:
-            self._init_players()
-            result = None
-            while not result:
-                result = self._perform_next_move()
-            self._finish_game(result)
+            self.fsm.handle_event(Events.INIT_GAME)
+            self.fsm.handle_event(Events.CONTINUE_GAME)
+            self.fsm.handle_event(Events.FINISH_GAME)
         except EOFError:
             print('Quitting the game...')
 
-    def _init_players(self):
+    def init_players(self):
         player1 = input('Please enter yor name (Player 1)\n')
         self.add_player(player1, 0)
         if self.__game_mode_multiplayer:
             player2 = input('Please enter yor name (Player 2)\n')
             self.add_player(player2, 1)
+        return None
 
-    def _perform_next_move(self):
+    def perform_next_move(self):
         print(self.get_board())
         move_ok = None
         while not move_ok:
             move = input('Please choose next move\n')
             move_ok = self.make_move(move)
-        return self.check_game_result()
+        self._in_game_result = self.check_game_result()
+        if not self._in_game_result:
+            self.fsm.handle_event(Events.CONTINUE_GAME)
 
-    def _finish_game(self, result):
+    def finish_game(self):
         print('Game Over!')
         print(self.get_board())
         print('\n')
-        print(result)
+        print(self._in_game_result)
         self.end_game()
         print('Thank you.')
+        return None
 
     def prompt_user_for_game_type(self):
         game_types = ['ox', 'interval']
