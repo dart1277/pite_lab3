@@ -50,7 +50,7 @@ class OXGame:
         try:
             self.fsm.handle_event(Events.INIT_GAME)
             self.fsm.handle_event(Events.CONTINUE_GAME)
-            self.fsm.handle_event(Events.FINISH_GAME)
+            self.fsm.handle_event(Events.DISPOSE_GAME)
         except EOFError:
             print('Quitting the game...')
 
@@ -71,6 +71,8 @@ class OXGame:
         self._in_game_result = self.check_game_result()
         if not self._in_game_result:
             self.fsm.handle_event(Events.CONTINUE_GAME)
+        else:
+            self.fsm.handle_event(Events.FINISH_GAME)
 
     def finish_game(self):
         print('Game Over!')

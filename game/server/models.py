@@ -70,7 +70,8 @@ class OXModel(GameModel):
             self._current_player = (self._current_player + 1) % len(self._players)
         else:
             free_fields = [u for u, v in enumerate(self._board) if v == -1]
-            if free_fields:
+            computer_move_ok = self.check_game_result() == 'False'
+            if free_fields and computer_move_ok:
                 computer_move = random.choice(free_fields)
                 self._board[computer_move] = len(self._players) - 1
 
