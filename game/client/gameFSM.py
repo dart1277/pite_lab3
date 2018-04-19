@@ -7,40 +7,57 @@ class GameState:
         self._action = action
 
     def handle_event(self, fsm, event):
-        pass
+        if event == Events.INIT_GAME:
+            return self.init_game(fsm)
+        elif event == Events.CONTINUE_GAME:
+            return self.continue_game(fsm)
+        elif event == Events.FINISH_GAME:
+            return self.finish_game(fsm)
+        elif event == Events.DISPOSE_GAME:
+            return self.dispose_game(fsm)
 
     def perform_action(self):
         self._action()
+
+    def init_game(self, fsm):
+        pass
+
+    def continue_game(self, fsm):
+        pass
+
+    def finish_game(self, fsm):
+        pass
+
+    def dispose_game(self, fsm):
+        pass
 
 
 class GameStateInit(GameState):
     def __init__(self, action):
         super().__init__(action)
 
-    def handle_event(self, fsm, event):
-        if event == Events.INIT_GAME:
-            self.perform_action()
-            fsm.set_state(GameStatus.IN_GAME)
+    def init_game(self, fsm):
+        self.perform_action()
+        fsm.set_state(GameStatus.IN_GAME)
 
 
 class GameStateContinue(GameState):
     def __init__(self, action):
         super().__init__(action)
 
-    def handle_event(self, fsm, event):
-        if event == Events.CONTINUE_GAME:
-            self.perform_action()
-        elif event == Events.FINISH_GAME:
-            fsm.set_state(GameStatus.END_GAME)
+    def continue_game(self, fsm):
+        self.perform_action()
+
+    def finish_game(self, fsm):
+        fsm.set_state(GameStatus.END_GAME)
 
 
 class GameStateEnd(GameState):
     def __init__(self, action):
         super().__init__(action)
 
-    def handle_event(self, fsm, event):
-        if event == Events.DISPOSE_GAME:
-            self.perform_action()
+    def dispose_game(self, fsm):
+        self.perform_action()
 
 
 class GameFSM:
